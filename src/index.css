@@ -1,0 +1,240 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* SwapIt - Playful, Child-Safe Design System */
+    --background: 210 40% 98%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    /* Teal - Primary (Trustworthy + Playful) */
+    --primary: 174 72% 40%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Coral - Secondary (Energetic) */
+    --secondary: 16 85% 65%;
+    --secondary-foreground: 0 0% 100%;
+
+    /* Soft Blue-Gray - Muted */
+    --muted: 210 30% 95%;
+    --muted-foreground: 215 20% 45%;
+
+    /* Golden Yellow - Accent (Gamification) */
+    --accent: 45 100% 55%;
+    --accent-foreground: 222 47% 11%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 210 25% 88%;
+    --input: 210 25% 88%;
+    --ring: 174 72% 40%;
+
+    --radius: 1rem;
+
+    /* Custom SwapIt Colors */
+    --swap-teal: 174 72% 40%;
+    --swap-teal-light: 174 72% 92%;
+    --swap-coral: 16 85% 65%;
+    --swap-coral-light: 16 85% 92%;
+    --swap-gold: 45 100% 55%;
+    --swap-gold-light: 45 100% 90%;
+    --swap-purple: 270 70% 60%;
+    --swap-purple-light: 270 70% 92%;
+    --swap-green: 142 70% 45%;
+    --swap-green-light: 142 70% 92%;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(174 72% 40%), hsl(174 72% 55%));
+    --gradient-secondary: linear-gradient(135deg, hsl(16 85% 65%), hsl(16 85% 75%));
+    --gradient-hero: linear-gradient(135deg, hsl(174 72% 40%), hsl(16 85% 65%));
+    --gradient-warm: linear-gradient(135deg, hsl(45 100% 55%), hsl(16 85% 65%));
+    --gradient-cool: linear-gradient(135deg, hsl(210 100% 60%), hsl(174 72% 40%));
+    --gradient-bg: linear-gradient(180deg, hsl(210 40% 98%), hsl(174 72% 97%));
+
+    /* Shadows */
+    --shadow-soft: 0 4px 20px -4px hsl(174 72% 40% / 0.15);
+    --shadow-card: 0 8px 32px -8px hsl(222 47% 11% / 0.1);
+    --shadow-button: 0 4px 16px -4px hsl(174 72% 40% / 0.3);
+    --shadow-glow: 0 0 40px hsl(174 72% 40% / 0.2);
+
+    /* Sidebar */
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222 47% 8%;
+    --foreground: 210 40% 98%;
+
+    --card: 222 47% 11%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 47% 11%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 174 72% 50%;
+    --primary-foreground: 222 47% 11%;
+
+    --secondary: 16 85% 60%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 45 100% 50%;
+    --accent-foreground: 222 47% 11%;
+
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217 33% 20%;
+    --input: 217 33% 20%;
+    --ring: 174 72% 50%;
+
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Nunito', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Nunito', sans-serif;
+    @apply font-bold tracking-tight;
+  }
+}
+
+@layer components {
+  .swap-gradient-primary {
+    background: var(--gradient-primary);
+  }
+
+  .swap-gradient-secondary {
+    background: var(--gradient-secondary);
+  }
+
+  .swap-gradient-hero {
+    background: var(--gradient-hero);
+  }
+
+  .swap-gradient-warm {
+    background: var(--gradient-warm);
+  }
+
+  .swap-gradient-cool {
+    background: var(--gradient-cool);
+  }
+
+  .swap-gradient-bg {
+    background: var(--gradient-bg);
+  }
+
+  .swap-shadow-soft {
+    box-shadow: var(--shadow-soft);
+  }
+
+  .swap-shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+
+  .swap-shadow-button {
+    box-shadow: var(--shadow-button);
+  }
+
+  .swap-shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+
+  .swap-blob {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+    animation: blob-morph 8s ease-in-out infinite;
+  }
+
+  @keyframes blob-morph {
+    0%, 100% {
+      border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+    }
+    50% {
+      border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+    }
+  }
+
+  .swap-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+
+  .swap-bounce {
+    animation: bounce-gentle 2s ease-in-out infinite;
+  }
+
+  @keyframes bounce-gentle {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+}
+
+@layer utilities {
+  .text-gradient-primary {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-hero {
+    background: var(--gradient-hero);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-warm {
+    background: var(--gradient-warm);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
