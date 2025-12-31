@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import KidDashboard from "@/components/dashboard/KidDashboard";
 import ParentDashboard from "@/components/dashboard/ParentDashboard";
+import AdminDashboard from "@/components/dashboard/AdminDashboard";
 import { useToast } from "@/hooks/use-toast";
 import { Sparkles, Bell, LogOut } from "lucide-react";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
@@ -142,10 +143,7 @@ const Dashboard = () => {
           <ParentDashboard profile={profile} parentData={parentData} />
         )}
         {profile?.role === "admin" && (
-          <div className="text-center py-8">
-            <h2 className="text-2xl font-bold mb-4">Admin Dashboard</h2>
-            <p className="text-muted-foreground">Admin features coming soon...</p>
-          </div>
+          <AdminDashboard profile={profile} />
         )}
       </main>
     </div>

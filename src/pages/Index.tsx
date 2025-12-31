@@ -84,7 +84,7 @@ const Index = () => {
               <Button variant="ghost" onClick={() => navigate("/auth")}>
                 Sign In
               </Button>
-              <Button variant="hero" onClick={() => navigate("/auth?mode=signup")}>
+              <Button variant="hero" onClick={() => navigate("/discover")}>
                 Get Started
               </Button>
             </div>
@@ -200,7 +200,7 @@ const Index = () => {
           <Button
             size="xl"
             className="bg-card text-foreground hover:bg-card/90"
-            onClick={() => navigate("/auth?mode=signup")}
+            onClick={() => navigate("/discover")}
           >
             Create Free Account <ArrowRight className="w-5 h-5" />
           </Button>

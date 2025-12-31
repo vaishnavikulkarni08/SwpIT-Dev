@@ -30,6 +30,7 @@ const ParentDashboard = ({ profile, parentData }: ParentDashboardProps) => {
   const [pendingApprovals, setPendingApprovals] = useState<any[]>([]);
   const [tradeHistory, setTradeHistory] = useState<any[]>([]);
   const [notifications, setNotifications] = useState<any[]>([]);
+  const [verificationRequests, setVerificationRequests] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -99,14 +100,73 @@ const ParentDashboard = ({ profile, parentData }: ParentDashboardProps) => {
         .order("created_at", { ascending: false })
         .limit(10);
 
+      // Fetch verification requests for children
+      const { data: verificationData } = await supabase
+        .from("verification_requests")
+        .select(`
+          *,
+          kids: kid_id (
+            age,
+            school_name,
+            profiles: profile_id (
+              full_name,
+              email
+            )
+          )
+        `)
+        .eq("status", "pending");
+
       setChildren(childrenData || []);
       setPendingApprovals(relevantApprovals);
       setTradeHistory(historyData || []);
       setNotifications(notificationsData || []);
+      setVerificationRequests(verificationData || []);
     } catch (error) {
       console.error("Error fetching dashboard data:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleVerification = async (requestId: string, kidId: string, approved: boolean) => {
+    try {
+      await supabase
+        .from("verification_requests")
+        .update({
+          status: approved ? "verified" : "rejected",
+          reviewed_by: profile.id,
+          reviewed_at: new Date().toISOString(),
+        })
+        .eq("id", requestId);
+
+      if (approved) {
+        // Update kid's parent_verified status
+        await supabase
+          .from("kids")
+          .update({ parent_verified: true })
+          .eq("id", kidId);
+
+        // Create parent-child link
+        await supabase.from("parent_child_links").insert({
+          parent_id: parentData.id,
+          kid_id: kidId,
+          is_primary: true,
+          verified_at: new Date().toISOString(),
+        });
+      }
+
+      toast({
+        title: approved ? "Child Verified" : "Verification Rejected",
+        description: `The child has been ${approved ? "verified" : "rejected"}.`,
+      });
+
+      fetchDashboardData(); // Refresh data
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to update verification status.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -116,7 +176,6 @@ const ParentDashboard = ({ profile, parentData }: ParentDashboardProps) => {
         .from("trades")
         .update({
           parent_approval_status: approved ? "approved" : "rejected",
-          status: approved ? "approved" : "cancelled"
         })
         .eq("id", tradeId);
 
@@ -129,7 +188,7 @@ const ParentDashboard = ({ profile, parentData }: ParentDashboardProps) => {
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to update trade status.",
+        description: "Failed to update trade approval status.",
         variant: "destructive",
       });
     }
@@ -231,8 +290,9 @@ const ParentDashboard = ({ profile, parentData }: ParentDashboardProps) => {
         transition={{ delay: 0.3 }}
       >
         <Tabs defaultValue="children" className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="children">My Children</TabsTrigger>
+            <TabsTrigger value="verification">Verification</TabsTrigger>
             <TabsTrigger value="approvals">Pending Approvals</TabsTrigger>
             <TabsTrigger value="history">Trade History</TabsTrigger>
             <TabsTrigger value="notifications">Notifications</TabsTrigger>
@@ -272,6 +332,57 @@ const ParentDashboard = ({ profile, parentData }: ParentDashboardProps) => {
                         </Badge>
                         <Button size="sm" variant="outline">
                           View Activity
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="verification" className="space-y-4">
+            {verificationRequests.length === 0 ? (
+              <Card>
+                <CardContent className="p-8 text-center">
+                  <Shield className="w-12 h-12 mx-auto text-green-500 mb-4" />
+                  <h3 className="text-lg font-semibold mb-2">No pending verifications</h3>
+                  <p className="text-muted-foreground">All children have been verified or there are no pending requests.</p>
+                </CardContent>
+              </Card>
+            ) : (
+              <div className="space-y-4">
+                {verificationRequests.map((request) => (
+                  <Card key={request.id} className="border-blue-200">
+                    <CardContent className="p-4">
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex-1">
+                          <h3 className="font-semibold mb-2">Child Verification Request</h3>
+                          <div className="space-y-1 text-sm">
+                            <p><strong>Name:</strong> {request.kids?.profiles?.full_name}</p>
+                            <p><strong>Age:</strong> {request.kids?.age}</p>
+                            <p><strong>School:</strong> {request.kids?.school_name}</p>
+                            <p><strong>Email:</strong> {request.kids?.profiles?.email}</p>
+                          </div>
+                        </div>
+                        <Shield className="w-6 h-6 text-blue-500 flex-shrink-0 ml-4" />
+                      </div>
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          variant="default"
+                          onClick={() => handleVerification(request.id, request.kid_id, true)}
+                        >
+                          <CheckCircle className="w-4 h-4 mr-1" />
+                          Verify Child
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          onClick={() => handleVerification(request.id, request.kid_id, false)}
+                        >
+                          <XCircle className="w-4 h-4 mr-1" />
+                          Reject
                         </Button>
                       </div>
                     </CardContent>

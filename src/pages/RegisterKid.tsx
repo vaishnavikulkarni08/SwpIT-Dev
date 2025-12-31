@@ -189,7 +189,7 @@ const RegisterKid = () => {
 
       toast({
         title: "Welcome to SwapIt! 🎉",
-        description: "Your account has been created. Ask your parent to verify your account!",
+        description: "Your account has been created. Ask your parent to verify your account to start trading!",
       });
 
       navigate("/dashboard");

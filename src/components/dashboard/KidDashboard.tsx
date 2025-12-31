@@ -187,9 +187,10 @@ const KidDashboard = ({ profile, kidData }: KidDashboardProps) => {
         transition={{ delay: 0.3 }}
       >
         <Tabs defaultValue="listings" className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="listings">My Listings</TabsTrigger>
             <TabsTrigger value="trades">Trades</TabsTrigger>
+            <TabsTrigger value="chat">Messages</TabsTrigger>
             <TabsTrigger value="notifications">Notifications</TabsTrigger>
             <TabsTrigger value="profile">Profile</TabsTrigger>
           </TabsList>
@@ -262,6 +263,43 @@ const KidDashboard = ({ profile, kidData }: KidDashboardProps) => {
                           Scheduled: {new Date(trade.scheduled_at).toLocaleDateString()}
                         </div>
                       )}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="chat" className="space-y-4">
+            {trades.filter(t => t.status !== 'proposed').length === 0 ? (
+              <Card>
+                <CardContent className="p-8 text-center">
+                  <MessageCircle className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+                  <h3 className="text-lg font-semibold mb-2">No active chats</h3>
+                  <p className="text-muted-foreground">Start trading to chat with other kids!</p>
+                </CardContent>
+              </Card>
+            ) : (
+              <div className="space-y-4">
+                {trades.filter(t => t.status !== 'proposed').map((trade) => (
+                  <Card key={trade.id}>
+                    <CardContent className="p-4">
+                      <div className="flex justify-between items-start mb-3">
+                        <div>
+                          <h3 className="font-semibold">
+                            Chat: {trade.initiator_listing?.title} ↔ {trade.responder_listing?.title}
+                          </h3>
+                          <Badge variant="outline">
+                            {trade.status}
+                          </Badge>
+                        </div>
+                        <Button size="sm" variant="outline">
+                          Open Chat
+                        </Button>
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        Chat with the other trader about your exchange
+                      </p>
                     </CardContent>
                   </Card>
                 ))}
